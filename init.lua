@@ -774,7 +774,7 @@ require('lazy').setup({
         end
       end,
       formatters = {
-        black = {timeout_ms = 2000}
+        black = { timeout_ms = 10000 },
       },
       formatters_by_ft = {
         lua = { 'stylua' },
