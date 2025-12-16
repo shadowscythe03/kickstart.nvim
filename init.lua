@@ -1036,5 +1036,8 @@ require('lazy').setup({
   },
 })
 
+-- Define a custom variable pointing to your plugin init file
+vim.env.MYPLUGRC = vim.fn.stdpath 'config' .. '/lua/custom/plugins/init.lua'
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
