@@ -15,8 +15,8 @@ return {
     end,
   },
   {
-    "ojroques/vim-oscyank",
-    event = "TextYankPost",
+    'ojroques/vim-oscyank',
+    event = 'TextYankPost',
   },
   { 'wakatime/vim-wakatime', lazy = false },
   {
@@ -61,13 +61,13 @@ return {
   },
   -- Using Lazy
   {
-    "navarasu/onedark.nvim",
+    'navarasu/onedark.nvim',
     priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
       require('onedark').setup {
-        style = 'darker'
+        style = 'darker',
       }
-      require('onedark').load()
-    end
-  }
+      -- require('onedark').load()
+    end,
+  },
 }
