@@ -2,6 +2,14 @@
 --  I promise not to create any merge conflicts in this directory :)
 --
 -- See the kickstart.nvim README for more information
+
+-- Normal mode: move current line
+vim.keymap.set('n', '<A-j>', ':m .+1<CR>==', { silent = true })
+vim.keymap.set('n', '<A-k>', ':m .-2<CR>==', { silent = true })
+
+-- Visual mode: move selected block
+vim.keymap.set('x', '<A-j>', ":m '>+1<CR>gv=gv", { silent = true })
+vim.keymap.set('x', '<A-k>', ":m '<-2<CR>gv=gv", { silent = true })
 return {
   {
     'tpope/vim-fugitive',

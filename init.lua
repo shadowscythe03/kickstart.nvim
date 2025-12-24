@@ -114,9 +114,37 @@ vim.o.showmode = false
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
+
 vim.schedule(function()
+  local is_ssh = os.getenv 'SSH_CLIENT' ~= nil or os.getenv 'SSH_TTY' ~= nil
+
+  if is_ssh then
+    -- Use Neovim's built-in OSC 52 for SSH sessions
+    vim.g.clipboard = {
+      name = 'OSC 52',
+      copy = {
+        ['+'] = require('vim.ui.clipboard.osc52').copy '+',
+        ['*'] = require('vim.ui.clipboard.osc52').copy '*',
+      },
+      -- We disable the "read" part of the paste to prevent the hang.
+      -- 'p' will now use Neovim's internal register instead of hanging.
+      paste = {
+        ['+'] = function()
+          return { vim.fn.split(vim.fn.getreg '', '\n'), vim.fn.getregtype '' }
+        end,
+        ['*'] = function()
+          return { vim.fn.split(vim.fn.getreg '', '\n'), vim.fn.getregtype '' }
+        end,
+      },
+    }
+  end
+
   vim.o.clipboard = 'unnamedplus'
 end)
+
+-- vim.schedule(function()
+--   vim.o.clipboard = 'unnamedplus'
+-- end)
 
 -- Enable break indent
 vim.o.breakindent = true
@@ -215,13 +243,13 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 --  Try it with `yap` in normal mode
 --  See `:help vim.hl.on_yank()`
 
--- vim.api.nvim_create_autocmd('TextYankPost', {
---   desc = 'Highlight when yanking (copying) text',
---   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
---   callback = function()
---     vim.hl.on_yank()
---   end,
--- })
+vim.api.nvim_create_autocmd('TextYankPost', {
+  desc = 'Highlight when yanking (copying) text',
+  group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
+  callback = function()
+    vim.hl.on_yank { higroup = 'IncSearch', timeout = 200 }
+  end,
+})
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -286,21 +314,6 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
     },
-  },
-  {
-    'ojroques/vim-oscyank',
-    event = 'TextYankPost',
-    config = function()
-      vim.api.nvim_create_autocmd('TextYankPost', {
-        group = vim.api.nvim_create_augroup('osc52-yank', { clear = true }),
-        callback = function()
-          vim.hl.on_yank { higroup = 'IncSearch', timeout = 200 }
-          if (vim.v.event.operator == 'y' or vim.v.event.operator == 'd') and vim.v.event.regname == '' then
-            vim.fn.OSCYankRegister '"'
-          end
-        end,
-      })
-    end,
   },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
