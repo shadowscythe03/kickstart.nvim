@@ -14,6 +14,10 @@ return {
       vim.keymap.set('n', '<leader>gc', ':Git commit -qam "', { noremap = true, desc = 'git commit -am' })
     end,
   },
+  {
+    "ojroques/vim-oscyank",
+    event = "TextYankPost",
+  },
   { 'wakatime/vim-wakatime', lazy = false },
   {
     'lervag/vimtex',
