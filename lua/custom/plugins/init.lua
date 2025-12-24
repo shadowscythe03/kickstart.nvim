@@ -18,13 +18,18 @@ return {
   {
     'lervag/vimtex',
     lazy = false, -- don't lazy load
-    enabled = vim.fn.has 'win32' == 1, -- only enable on Windows
+    enabled = vim.fn.executable 'pdflatex' == 1 or vim.fn.executable 'xelatex' == 1 or vim.fn.executable 'lualatex' == 1, -- enable only if LaTeX is installed
     init = function()
-      -- Use SumatraPDF on Windows
-      vim.g.vimtex_view_method = 'general'
-      vim.g.vimtex_view_general_viewer = [[C:\Users\abhir\AppData\Local\SumatraPDF\SumatraPDF.exe]]
-      -- Optional: configure forward search
-      vim.g.vimtex_view_general_options = [[-reuse-instance -forward-search @tex @line @pdf]]
+      if vim.fn.has 'win32' == 1 then
+        -- Use SumatraPDF on Windows
+        vim.g.vimtex_view_method = 'general'
+        vim.g.vimtex_view_general_viewer = [[C:\Users\abhir\AppData\Local\SumatraPDF\SumatraPDF.exe]]
+        -- Optional: configure forward search
+        vim.g.vimtex_view_general_options = [[-reuse-instance -forward-search @tex @line @pdf]]
+      else
+        -- On Linux/macOS you might use Zathura, Skim, or Okular
+        vim.g.vimtex_view_method = 'zathura'
+      end
     end,
   },
   {
