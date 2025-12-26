@@ -115,4 +115,20 @@ return {
       'RainbowMultiDelim',
     },
   },
+  {
+    'chentoast/marks.nvim',
+    event = 'VeryLazy',
+    opts = {
+      -- whether to map keybinds or not. default true
+      default_mappings = true,
+      -- which builtin marks to show. default {}
+      builtin_marks = { '.', '<', '>', '^' },
+      -- cycle marks. default true
+      cyclic = true,
+      -- whether the bookmark column should be combined with the signcolumn
+      force_write_shada = false,
+      -- how often (in ms) to redraw signs/recompute marks. default 150
+      refresh_interval = 250,
+    },
+  },
 }
