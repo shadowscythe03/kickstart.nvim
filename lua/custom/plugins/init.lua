@@ -48,6 +48,11 @@ return {
       -- Disable ALE's internal LSP integration
       vim.g.ale_disable_lsp = 1
 
+      -- Tell ALE NOT to format files, let Conform do it
+      vim.g.ale_fix_on_save = 0
+      -- Only use ALE for things LSP doesn't catch
+      vim.g.ale_linters_explicit = 1
+
       g.ale_ruby_rubocop_auto_correct_all = 1
 
       g.ale_linters = {
@@ -95,6 +100,7 @@ return {
       },
     },
     cmd = { 'CsvViewEnable', 'CsvViewDisable', 'CsvViewToggle' },
+    vim.keymap.set('n', '<leader>tc', '<cmd>CsvViewToggle<CR>', { desc = '[T]oggle [C]SV View' }),
   },
   {
     'cameron-wags/rainbow_csv.nvim',
@@ -130,5 +136,26 @@ return {
       -- how often (in ms) to redraw signs/recompute marks. default 150
       refresh_interval = 250,
     },
+  },
+  {
+    'stevearc/aerial.nvim',
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter',
+      'nvim-tree/nvim-web-devicons',
+    },
+    config = function()
+      require('aerial').setup {
+        -- optionally use on_attach to set keymaps when aerial has attached to a buffer
+        on_attach = function(bufnr)
+          -- Jump forwards/backwards with '{' and '}'
+          -- NOTE: This overrides the default vim behavior of jumping paragraphs!
+          vim.keymap.set('n', '{', '<cmd>AerialPrev<CR>', { buffer = bufnr, desc = 'Aerial Prev' })
+          vim.keymap.set('n', '}', '<cmd>AerialNext<CR>', { buffer = bufnr, desc = 'Aerial Next' })
+        end,
+      }
+
+      -- Set a keymap to toggle aerial
+      vim.keymap.set('n', '<leader>a', '<cmd>AerialToggle!<CR>', { desc = 'Toggle [A]erial' })
+    end,
   },
 }

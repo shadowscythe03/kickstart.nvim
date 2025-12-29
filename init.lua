@@ -379,6 +379,7 @@ require('lazy').setup({
         { '<leader>s', group = '[S]earch' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { '<leader>g', group = '[G]it' },
       },
     },
   },
@@ -455,6 +456,7 @@ require('lazy').setup({
       -- Enable Telescope extensions if they are installed
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
+      pcall(require('telescope').load_extension, 'aerial')
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
@@ -468,6 +470,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      vim.keymap.set('n', '<leader>sa', '<cmd>Telescope aerial<CR>', { desc = '[S]earch [A]erial (Symbols)' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -944,7 +947,7 @@ require('lazy').setup({
     priority = 1000, -- load before other plugins
     config = function()
       require('cyberdream').setup {
-        transparent = true,
+        transparent = false,
         italic_comments = true,
       }
       vim.cmd.colorscheme 'cyberdream'
